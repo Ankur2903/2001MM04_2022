@@ -31,23 +31,27 @@ def octact_identification(mod=5000):
         avg_of_v = np.mean(v)
         avg_of_w = np.mean(w)
 
+        for i in range(n):
+            v_.append(v[i]-avg_of_v)
+            u_.append(u[i]-avg_of_u)
+            w_.append(w[i]-avg_of_w)
         
 
     with open("octant_output.csv","w",newline = "") as file:
         writer = csv.writer(file)
         for i in range(n+1):
             if i==0:
-                writer.writerow(["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Octant","","Octant ID","1","-1","2","-2","3","-3","4","-4"])
+                writer.writerow(["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","Octant ID","1","-1","2","-2","3","-3","4","-4"])
             elif i==1:
-                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),str(avg_of_u),str(avg_of_v),str(avg_of_w)])
+                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),str(avg_of_u),str(avg_of_v),str(avg_of_w),u_[i-1],v_[i-1],w_[i-1]])
             elif i==2:
-                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1])])
+                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1]])
             elif i==3:
-                 writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1])])
+                 writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1]])
             elif i>3 and i<=3+(n-1)/mod:
-                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1])])
+                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1]])
             else:
-                 writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1])])
+                 writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1]])
 
 mod=5000
 octact_identification(mod)
