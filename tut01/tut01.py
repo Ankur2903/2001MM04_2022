@@ -72,6 +72,70 @@ def octact_identification(mod=5000):
             else:
                 total[7] = total[7] +1
 
+        octant_1 = [0]*((n-1)//mod+1)
+        octant_2 = [0]*((n-1)//mod+1)
+        octant_3 = [0]*((n-1)//mod+1)
+        octant_4 = [0]*((n-1)//mod+1)
+        octant__1 = [0]*((n-1)//mod+1)
+        octant__2 = [0]*((n-1)//mod+1)
+        octant__3 = [0]*((n-1)//mod+1)
+        octant__4 = [0]*((n-1)//mod+1)
+
+        for i in range(mod+1):
+            if octant[i] ==1:
+                octant_1[0] = octant_1[0] +1
+            elif octant[i] ==2:
+                octant_2[0] = octant_2[0] +1
+            elif octant[i] ==3:
+                octant_3[0] = octant_3[0] +1
+            elif octant[i] ==4:
+                octant_4[0] = octant_4[0] +1
+            elif octant[i] ==-1:
+                octant__1[0] = octant__1[0] +1
+            elif octant[i] ==-2:
+                octant__2[0] = octant__2[0] +1
+            elif octant[i] ==-3:
+                octant__3[0] = octant__3[0] +1
+            else:
+                octant__4[0] = octant__4[0] +1
+        
+        for i in range(1,(n-1)//mod):
+            for j in range(i*mod+1,(i+1)*mod+1):
+                if octant[j] ==1:
+                     octant_1[i] = octant_1[i] +1
+                elif octant[j] ==2:
+                    octant_2[i] = octant_2[i] +1
+                elif octant[j] ==3:
+                    octant_3[i] = octant_3[i] +1
+                elif octant[j] ==4:
+                    octant_4[i] = octant_4[i] +1
+                elif octant[j] ==-1:
+                    octant__1[i] = octant__1[i] +1
+                elif octant[j] ==-2:
+                    octant__2[i] = octant__2[i] +1
+                elif octant[j] ==-3:
+                    octant__3[i] = octant__3[i] +1
+                else:
+                    octant__4[i] = octant__4[i] +1
+
+        for i in range(((n-1)//mod)*mod+1,n):
+            if octant[i] ==1:
+                octant_1[(n-1)//mod] = octant_1[(n-1)//mod] +1
+            elif octant[i] ==2:
+                octant_2[(n-1)//mod] = octant_2[(n-1)//mod] +1
+            elif octant[i] ==3:
+                octant_3[(n-1)//mod] = octant_3[(n-1)//mod] +1
+            elif octant[i] ==4:
+                octant_4[(n-1)//mod] = octant_4[(n-1)//mod] +1
+            elif octant[i] ==-1:
+                octant__1[(n-1)//mod] = octant__1[(n-1)//mod] +1
+            elif octant[i] ==-2:
+                octant__2[(n-1)//mod] = octant__2[(n-1)//mod] +1
+            elif octant[i] ==-3:
+                octant__3[(n-1)//mod] = octant__3[(n-1)//mod] +1
+            else:
+                octant__4[(n-1)//mod] = octant__4[(n-1)//mod] +1
+
     with open("octant_output.csv","w",newline = "") as file:
         writer = csv.writer(file)
         for i in range(n+1):
@@ -82,11 +146,14 @@ def octact_identification(mod=5000):
             elif i==2:
                 writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"User Input","Mod "+ str(mod)])
             elif i==3:
-                 writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod)+"-"+str((i-2)*mod)])
+                 writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod)+"-"+str((i-2)*mod),octant_1[i-3],octant__1[i-3],octant_2[i-3],octant__2[i-3],octant_3[i-3],octant__3[i-3],octant_4[i-3],octant__4[i-3]])
             elif i>3 and i<=3+(n-1)/mod:
-                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod+1)+"-"+str((i-2)*mod)])
+                writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod+1)+"-"+str((i-2)*mod),octant_1[i-3],octant__1[i-3],octant_2[i-3],octant__2[i-3],octant_3[i-3],octant__3[i-3],octant_4[i-3],octant__4[i-3]])
             else:
                  writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",""])
+
+mod=5000
+octact_identification(mod)
 
 mod=5000
 octact_identification(mod)
