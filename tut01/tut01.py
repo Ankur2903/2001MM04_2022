@@ -4,11 +4,11 @@ def octact_identification(mod=5000):
     u = []
     v = []
     w = []
-    u_ = []
+    u_ = []#u-avg_of_u
     v_ = []
     w_ = []
-    octant = []
-    total = [0]*8
+    octant = []#store octant value
+    total = [0]*8#count of 1,2,3,4,-1,-2,-3,-4
 
     import csv
     import os
@@ -21,7 +21,7 @@ def octact_identification(mod=5000):
                 time.append(x[0])
                 i = i+1
             else:
-                time.append(x[0])
+                time.append(x[0])#add element in time,u,v,w list
                 u.append(float(x[1]))
                 v.append(float(x[2]))
                 w.append(float(x[3]))
@@ -29,14 +29,14 @@ def octact_identification(mod=5000):
         n = len(u)
         avg_of_u = np.mean(u)
         avg_of_v = np.mean(v)
-        avg_of_w = np.mean(w)
+        avg_of_w = np.mean(w)#store avg of u,v,w in avg_of_u,avg_of_v,avg_of_w
 
         for i in range(n):
             v_.append(v[i]-avg_of_v)
             u_.append(u[i]-avg_of_u)
             w_.append(w[i]-avg_of_w)
 
-        for i in range(n):
+        for i in range(n):#for identfy octant
             if u_[i]>=0 and v_[i]>=0 and w_[i]>0:
                 octant.append(1)
             elif u_[i]<0 and v_[i]>=0 and w_[i]>0:
@@ -54,7 +54,7 @@ def octact_identification(mod=5000):
             else:
                 octant.append(-4)
         
-        for j in range(0,n):
+        for j in range(0,n):#for count total no of 1,2,3,4,-1,-2,-3,-4
             if octant[j] ==1:
                 total[0] = total[0] +1
             elif octant[j] ==2:
@@ -72,7 +72,7 @@ def octact_identification(mod=5000):
             else:
                 total[7] = total[7] +1
 
-        octant_1 = [0]*((n-1)//mod+1)
+        octant_1 = [0]*((n-1)//mod+1)#store count of 1 in every mod value
         octant_2 = [0]*((n-1)//mod+1)
         octant_3 = [0]*((n-1)//mod+1)
         octant_4 = [0]*((n-1)//mod+1)
@@ -82,7 +82,7 @@ def octact_identification(mod=5000):
         octant__4 = [0]*((n-1)//mod+1)
 
         for i in range(mod+1):
-            if octant[i] ==1:
+            if octant[i] ==1:#count of 1 in 0 to mod
                 octant_1[0] = octant_1[0] +1
             elif octant[i] ==2:
                 octant_2[0] = octant_2[0] +1
@@ -101,7 +101,7 @@ def octact_identification(mod=5000):
         
         for i in range(1,(n-1)//mod):
             for j in range(i*mod+1,(i+1)*mod+1):
-                if octant[j] ==1:
+                if octant[j] ==1:#count of 1 in i*mod_1 to (i+1)*mod
                      octant_1[i] = octant_1[i] +1
                 elif octant[j] ==2:
                     octant_2[i] = octant_2[i] +1
@@ -119,7 +119,7 @@ def octact_identification(mod=5000):
                     octant__4[i] = octant__4[i] +1
 
         for i in range(((n-1)//mod)*mod+1,n):
-            if octant[i] ==1:
+            if octant[i] ==1:#count 1 in rest element 
                 octant_1[(n-1)//mod] = octant_1[(n-1)//mod] +1
             elif octant[i] ==2:
                 octant_2[(n-1)//mod] = octant_2[(n-1)//mod] +1
