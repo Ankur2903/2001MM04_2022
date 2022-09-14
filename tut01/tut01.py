@@ -136,5 +136,5 @@ def octact_identification(mod=5000):
                     writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",""])
     except:
         print("Error!")
-mod=int(input("Enter mod value: "))
+mod=5000
 octact_identification(mod)
