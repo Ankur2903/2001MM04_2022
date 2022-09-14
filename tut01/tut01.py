@@ -81,27 +81,9 @@ def octact_identification(mod=5000):
             octant__2 = [0]*((n-1)//mod+1)
             octant__3 = [0]*((n-1)//mod+1)
             octant__4 = [0]*((n-1)//mod+1)
-
-            for i in range(mod+1):
-                if octant[i] ==1:#count of 1 in 0 to mod
-                    octant_1[0] = octant_1[0] +1
-                elif octant[i] ==2:
-                    octant_2[0] = octant_2[0] +1
-                elif octant[i] ==3:
-                    octant_3[0] = octant_3[0] +1
-                elif octant[i] ==4:
-                    octant_4[0] = octant_4[0] +1
-                elif octant[i] ==-1:
-                    octant__1[0] = octant__1[0] +1
-                elif octant[i] ==-2:
-                    octant__2[0] = octant__2[0] +1
-                elif octant[i] ==-3:
-                    octant__3[0] = octant__3[0] +1
-                else:
-                    octant__4[0] = octant__4[0] +1
             
-            for i in range(1,(n-1)//mod):
-                for j in range(i*mod+1,(i+1)*mod+1):
+            for i in range(0,(n-1)//mod):
+                for j in range(i*mod,(i+1)*mod):
                     if octant[j] ==1:#count of 1 in i*mod_1 to (i+1)*mod
                         octant_1[i] = octant_1[i] +1
                     elif octant[j] ==2:
@@ -119,7 +101,7 @@ def octact_identification(mod=5000):
                     else:
                         octant__4[i] = octant__4[i] +1
 
-            for i in range(((n-1)//mod)*mod+1,n):
+            for i in range(((n-1)//mod)*mod,n):
                 if octant[i] ==1:#count 1 in rest element 
                     octant_1[(n-1)//mod] = octant_1[(n-1)//mod] +1
                 elif octant[i] ==2:
@@ -146,15 +128,13 @@ def octact_identification(mod=5000):
                     writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),str(avg_of_u),str(avg_of_v),str(avg_of_w),u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"","Overall Count",str(total[0]),str(total[1]),str(total[2]),str(total[3]),str(total[4]),str(total[5]),str(total[6]),str(total[7])])
                 elif i==2:
                     writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"User Input","Mod "+ str(mod)])
-                elif i==3:
-                    writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod)+"-"+str((i-2)*mod),octant_1[i-3],octant__1[i-3],octant_2[i-3],octant__2[i-3],octant_3[i-3],octant__3[i-3],octant_4[i-3],octant__4[i-3]])
-                elif i>3 and i<=3+(n-1)/mod:
-                    writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod+1)+"-"+str((i-2)*mod),octant_1[i-3],octant__1[i-3],octant_2[i-3],octant__2[i-3],octant_3[i-3],octant__3[i-3],octant_4[i-3],octant__4[i-3]])
+                elif i>2 and i<3+(n-1)//mod:
+                    writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod)+"-"+str((i-2)*mod-1),octant_1[i-3],octant__1[i-3],octant_2[i-3],octant__2[i-3],octant_3[i-3],octant__3[i-3],octant_4[i-3],octant__4[i-3]])
+                elif i==3+(n-1)//mod:
+                    writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",str((i-3)*mod)+"-"+str(n),octant_1[i-3],octant__1[i-3],octant_2[i-3],octant__2[i-3],octant_3[i-3],octant__3[i-3],octant_4[i-3],octant__4[i-3]])
                 else:
                     writer.writerow([time[i],str(u[i-1]),str(v[i-1]),str(w[i-1]),"","","",u_[i-1],v_[i-1],w_[i-1],str(octant[i-1]),"",""])
     except:
         print("Error!")
-
-
 mod=int(input("Enter mod value: "))
 octact_identification(mod)
