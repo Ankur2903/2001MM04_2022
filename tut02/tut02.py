@@ -15,7 +15,7 @@ def octact_identification(mod=5000):
     w_ = []
     octant = []#store octant value
     total = [0]*8#count of 1,2,3,4,-1,-2,-3,-4
-    octants = ["+1","-1","+2","-2","+3","-3","+4","-4"]
+    octants = ["Mod Transition Count","","Count","+1","-1","+2","-2","+3","-3","+4","-4"," "," "]
 
     for i in range(2, n + 1):
         time.append(sheet.cell(row=i, column=1).value)#append time value in time list
@@ -131,7 +131,21 @@ def octact_identification(mod=5000):
             octant__3[(n-2)//mod] = octant__3[(n-2)//mod] +1
         else:
             octant__4[(n-2)//mod] = octant__4[(n-2)//mod] +1
-    
+
+    line1 = []
+    for i in range(n-1):
+        if (i)%13==0 and i!=1 and i<((n-2)//mod +1)*14+2:
+            line1.append("From")
+        else:
+            line1.append("")    
+
+    line2 = []
+    for i in range(n-1):
+        if  i<((n-2)//mod +2)*13:
+            line2.append(octants[i%13])
+        else:
+            line2.append("")
+    print(line2[2])
     from openpyxl import Workbook
     book = Workbook()
     sheet = book.active
@@ -142,25 +156,23 @@ def octact_identification(mod=5000):
 
     for i in range(n-1):
         if i==0:
-            rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i]," ","Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7]])
+            rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7]])
         elif i==1:
             rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"User Input","Mod "+ str(mod)])
         elif i==2:
             rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",str((i-2)*mod)+"-"+str((i-1)*mod),octant_1[i-2],octant__1[i-2],octant_2[i-2],octant__2[i-2],octant_3[i-2],octant__3[i-2],octant_4[i-2],octant__4[i-2]])
-        elif i>2 and i<=2+(n-2)/mod:
+        elif i>2 and i<=2+(n-2)//mod:
             rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",str((i-2)*mod+1)+"-"+str((i-1)*mod),octant_1[i-2],octant__1[i-2],octant_2[i-2],octant__2[i-2],octant_3[i-2],octant__3[i-2],octant_4[i-2],octant__4[i-2]])
         elif i == 3+(n-2)//mod:
-            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]," ","Verified",np.sum(octant_1),np.sum(octant__1),np.sum(octant_2),np.sum(octant__2),np.sum(octant_3),np.sum(octant__3),np.sum(octant_4),np.sum(octant__4)])
+            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","Verified",np.sum(octant_1),np.sum(octant__1),np.sum(octant_2),np.sum(octant__2),np.sum(octant_3),np.sum(octant__3),np.sum(octant_4),np.sum(octant__4)])
         elif i==5+(n-2)//mod:
-            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]," ","Overall Transition Count"])
-        elif i==6+(n-2)//mod:
-            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]," "," ","To"])
+            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","Overall Transition Count"])
+        elif (i-(6+(n-2)//mod))%13==0 and  i<((n-2)//mod +2)*14 +4:
+            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],""," ","To"])
         elif i==7+(n-2)//mod:
-            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]," ","Count","+1","-1","+2","-2","+3","-3","+4","-4"])
-        elif i==8+(n-2)//mod:
-            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"From",octants[i-(8+(n-1)//mod)]])
-        elif i>7+(n-1)//mod and i<=15+(n-2)//mod:
-            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]," ",octants[i-(8+(n-1)//mod)]])
+            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",line2[i+2-(7+(n-2)//mod)],"+1","-1","+2","-2","+3","-3","+4","-4"])
+        elif i<((n-2)//mod +2)*14 +4:
+            rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],line1[i],line2[i+2-(7+(n-2)//mod)]])
         else:
             rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
