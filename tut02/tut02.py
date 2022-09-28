@@ -1,134 +1,138 @@
 import numpy as np
-def octact_identification(mod=5000):
-    from openpyxl import load_workbook
-    wb = load_workbook("input_octant_transition_identify.xlsx")
-    sheet = wb["Sheet1"]
-    n = sheet.max_row
-    #n = row_count
-    time =[]#time list
-    u = []#U list
-    v = []#V list
-    w = []#W list
-    u_ = []# u - avg_of_u
-    v_ = []#v - avg_of_v
-    w_ = []#w - avg_of_w
-    octant = []#store octant value
-    total = [0]*8#count of 1,2,3,4,-1,-2,-3,-4
-    octants = ["Mod Transition Count","","Count","+1","-1","+2","-2","+3","-3","+4","-4"," "," "]
-    list_ = [1,-1,2,-2,3,-3,4,-4]
+from openpyxl import load_workbook
+def octact_transition_count(mod=5000):
+    try:
+        wb = load_workbook("input_octant_transition_identify.xlsx")
+        sheet = wb["Sheet1"]
+        n = sheet.max_row
+        #n = row_count
+        time =[]#time list
+        u = []#U list
+        v = []#V list
+        w = []#W list
+        u_ = []# u - avg_of_u
+        v_ = []#v - avg_of_v
+        w_ = []#w - avg_of_w
+        octant = []#store octant value
+        total = [0]*8#count of 1,2,3,4,-1,-2,-3,-4
+        octants = ["Mod Transition Count","","Count","+1","-1","+2","-2","+3","-3","+4","-4"," "," "]
+        list_ = [1,-1,2,-2,3,-3,4,-4]
 
-    for i in range(2, n + 1):
-        time.append(sheet.cell(row=i, column=1).value)#append time value in time list
-        u.append(sheet.cell(row=i, column=2).value)
-        v.append(sheet.cell(row=i, column=3).value)
-        w.append(sheet.cell(row=i, column=4).value)
+        for i in range(2, n + 1):
+            time.append(sheet.cell(row=i, column=1).value)#append time value in time list
+            u.append(sheet.cell(row=i, column=2).value)
+            v.append(sheet.cell(row=i, column=3).value)
+            w.append(sheet.cell(row=i, column=4).value)
 
-    avg_of_u = np.mean(u)
-    avg_of_v = np.mean(v)
-    avg_of_w = np.mean(w)#store avg of u,v,w in avg_of_u,avg_of_v,avg_of_w
+        avg_of_u = np.mean(u)
+        avg_of_v = np.mean(v)
+        avg_of_w = np.mean(w)#store avg of u,v,w in avg_of_u,avg_of_v,avg_of_w
 
-    for i in range(n-1):
-        v_.append(v[i]-avg_of_v)#append V-Vavg in v_
-        u_.append(u[i]-avg_of_u)
-        w_.append(w[i]-avg_of_w)
-    
-    for i in range(n-1):#for identfy octant
-            if u_[i]>=0 and v_[i]>=0 and w_[i]>0:
-                octant.append(+1)
-            elif u_[i]<0 and v_[i]>=0 and w_[i]>0:
-                octant.append(+2)
-            elif u_[i]<0 and v_[i]<0 and w_[i]>=0:
-                octant.append(+3)
-            elif u_[i]>=0 and v_[i]<0 and w_[i]>=0:
-                octant.append(+4)
-            elif u_[i]>=0 and v_[i]>=0 and w_[i]<=0:
-                octant.append(-1)
-            elif u_[i]<0 and v_[i]>=0 and w_[i]<=0:
-                octant.append(-2)
-            elif u_[i]<0 and v_[i]<0 and w_[i]<0:
-                octant.append(-3)
-            else:
-                octant.append(-4)
-
-    for j in range(0,n-1):#for count total no of 1,2,3,4,-1,-2,-3,-4
-        if octant[j] ==1:
-            total[0] = total[0] +1
-        elif octant[j] ==2:
-            total[2] = total[2] +1
-        elif octant[j] ==3:
-            total[4] = total[4] +1
-        elif octant[j] ==4:
-            total[6] = total[6] +1
-        elif octant[j] ==-1:
-            total[1] = total[1] +1
-        elif octant[j] ==-2:
-            total[3] = total[3] +1
-        elif octant[j] ==-3:
-            total[5] = total[5] +1
-        else:
-            total[7] = total[7] +1
-
-    octant_1 = [0]*((n-2)//mod+1)#store count of 1 in every mod value
-    octant_2 = [0]*((n-2)//mod+1)
-    octant_3 = [0]*((n-2)//mod+1)
-    octant_4 = [0]*((n-2)//mod+1)
-    octant__1 = [0]*((n-2)//mod+1)
-    octant__2 = [0]*((n-2)//mod+1)
-    octant__3 = [0]*((n-2)//mod+1)
-    octant__4 = [0]*((n-2)//mod+1)
+        for i in range(n-1):
+            v_.append(v[i]-avg_of_v)#append V-Vavg in v_
+            u_.append(u[i]-avg_of_u)
+            w_.append(w[i]-avg_of_w)
         
-    for i in range(0,(n-2)//mod):
-        for j in range(i*mod,(i+1)*mod):
-            if octant[j] ==1:#count of 1 in i*mod_1 to (i+1)*mod
-                 octant_1[i] = octant_1[i] +1
+        for i in range(n-1):#for identfy octant
+                if u_[i]>=0 and v_[i]>=0 and w_[i]>0:
+                    octant.append(+1)
+                elif u_[i]<0 and v_[i]>=0 and w_[i]>0:
+                    octant.append(+2)
+                elif u_[i]<0 and v_[i]<0 and w_[i]>=0:
+                    octant.append(+3)
+                elif u_[i]>=0 and v_[i]<0 and w_[i]>=0:
+                    octant.append(+4)
+                elif u_[i]>=0 and v_[i]>=0 and w_[i]<=0:
+                    octant.append(-1)
+                elif u_[i]<0 and v_[i]>=0 and w_[i]<=0:
+                    octant.append(-2)
+                elif u_[i]<0 and v_[i]<0 and w_[i]<0:
+                    octant.append(-3)
+                else:
+                    octant.append(-4)
+
+        for j in range(0,n-1):#for count total no of 1,2,3,4,-1,-2,-3,-4
+            if octant[j] ==1:
+                total[0] = total[0] +1
             elif octant[j] ==2:
-                octant_2[i] = octant_2[i] +1
+                total[2] = total[2] +1
             elif octant[j] ==3:
-                octant_3[i] = octant_3[i] +1
+                total[4] = total[4] +1
             elif octant[j] ==4:
-                octant_4[i] = octant_4[i] +1
+                total[6] = total[6] +1
             elif octant[j] ==-1:
-                octant__1[i] = octant__1[i] +1
+                total[1] = total[1] +1
             elif octant[j] ==-2:
-                octant__2[i] = octant__2[i] +1
+                total[3] = total[3] +1
             elif octant[j] ==-3:
-                octant__3[i] = octant__3[i] +1
+                total[5] = total[5] +1
             else:
-                octant__4[i] = octant__4[i] +1
+                total[7] = total[7] +1
 
-    for i in range(((n-2)//mod)*mod,n-1):
-        if octant[i] ==1:#count 1 in rest element 
-            octant_1[(n-2)//mod] = octant_1[(n-2)//mod] +1
-        elif octant[i] ==2:
-            octant_2[(n-2)//mod] = octant_2[(n-2)//mod] +1
-        elif octant[i] ==3:
-            octant_3[(n-2)//mod] = octant_3[(n-2)//mod] +1
-        elif octant[i] ==4:
-            octant_4[(n-2)//mod] = octant_4[(n-2)//mod] +1
-        elif octant[i] ==-1:
-            octant__1[(n-2)//mod] = octant__1[(n-2)//mod] +1
-        elif octant[i] ==-2:
-            octant__2[(n-2)//mod] = octant__2[(n-2)//mod] +1
-        elif octant[i] ==-3:
-            octant__3[(n-2)//mod] = octant__3[(n-2)//mod] +1
-        else:
-            octant__4[(n-2)//mod] = octant__4[(n-2)//mod] +1
+        octant_1 = [0]*((n-2)//mod+1)#store count of 1 in every mod value
+        octant_2 = [0]*((n-2)//mod+1)
+        octant_3 = [0]*((n-2)//mod+1)
+        octant_4 = [0]*((n-2)//mod+1)
+        octant__1 = [0]*((n-2)//mod+1)
+        octant__2 = [0]*((n-2)//mod+1)
+        octant__3 = [0]*((n-2)//mod+1)
+        octant__4 = [0]*((n-2)//mod+1)
+            
+        for i in range(0,(n-2)//mod):
+            for j in range(i*mod,(i+1)*mod):
+                if octant[j] ==1:#count of 1 in i*mod_1 to (i+1)*mod
+                    octant_1[i] = octant_1[i] +1
+                elif octant[j] ==2:
+                    octant_2[i] = octant_2[i] +1
+                elif octant[j] ==3:
+                    octant_3[i] = octant_3[i] +1
+                elif octant[j] ==4:
+                    octant_4[i] = octant_4[i] +1
+                elif octant[j] ==-1:
+                    octant__1[i] = octant__1[i] +1
+                elif octant[j] ==-2:
+                    octant__2[i] = octant__2[i] +1
+                elif octant[j] ==-3:
+                    octant__3[i] = octant__3[i] +1
+                else:
+                    octant__4[i] = octant__4[i] +1
 
-    line1 = []
-    for i in range(n-1):#made a list for append -from- in rows list
-        if (i)%13==0 and i!=1 and i<((n-2)//mod +2)*14+2:
-            line1.append("From")
-        else:
-            line1.append("")    
+        for i in range(((n-2)//mod)*mod,n-1):
+            if octant[i] ==1:#count 1 in rest element 
+                octant_1[(n-2)//mod] = octant_1[(n-2)//mod] +1
+            elif octant[i] ==2:
+                octant_2[(n-2)//mod] = octant_2[(n-2)//mod] +1
+            elif octant[i] ==3:
+                octant_3[(n-2)//mod] = octant_3[(n-2)//mod] +1
+            elif octant[i] ==4:
+                octant_4[(n-2)//mod] = octant_4[(n-2)//mod] +1
+            elif octant[i] ==-1:
+                octant__1[(n-2)//mod] = octant__1[(n-2)//mod] +1
+            elif octant[i] ==-2:
+                octant__2[(n-2)//mod] = octant__2[(n-2)//mod] +1
+            elif octant[i] ==-3:
+                octant__3[(n-2)//mod] = octant__3[(n-2)//mod] +1
+            else:
+                octant__4[(n-2)//mod] = octant__4[(n-2)//mod] +1
 
-    line2 = []
-    for i in range(n-1):#made a list for append [1,-1,2,-2,3,-3,4,-4] and range of mod in row list
-        if i%13==1 and i<((n-2)//mod +2)*13 and i!=1:
-            line2.append(str((i//13-1)*mod)+"-"+str(np.minimum((i//13)*mod-1,n-2)))#append range
-        elif i<((n-2)//mod +2)*13:
-            line2.append(octants[i%13])#append [1,-1,2,-2,3,-3,4,-4]
-        else:
-            line2.append("")#append blank
+        line1 = []
+        for i in range(n-1):#made a list for append -from- in rows list
+            if (i)%13==0 and i!=1 and i<((n-2)//mod +2)*14+2:
+                line1.append("From")
+            else:
+                line1.append("")    
+
+        line2 = []
+        for i in range(n-1):#made a list for append [1,-1,2,-2,3,-3,4,-4] and range of mod in row list
+            if i%13==1 and i<((n-2)//mod +2)*13 and i!=1:
+                line2.append(str((i//13-1)*mod)+"-"+str(np.minimum((i//13)*mod-1,n-2)))#append range
+            elif i<((n-2)//mod +2)*13:
+                line2.append(octants[i%13])#append [1,-1,2,-2,3,-3,4,-4]
+            else:
+                line2.append("")#append blank
+    except:
+        print("File does not exist")
+        exit()
 
     def function1(first, last,a):#define a function for count countinous a,(1,-1,2,-2,3,-3,4,-4)and put them in list named line
         line = [0]*8
@@ -150,7 +154,7 @@ def octact_identification(mod=5000):
             if octant[i]==a and octant[i+1]==-4:#count countinous a,-4
                 line[7] = line[7] +1
         return line
- 
+
     from openpyxl import Workbook
     book = Workbook()
     sheet = book.active
@@ -196,4 +200,4 @@ def octact_identification(mod=5000):
         sheet.append(row)
     book.save('output_octant_transition_identify.xlsx')
 mod=5000
-octact_identification(mod)
+octact_transition_count(mod)
