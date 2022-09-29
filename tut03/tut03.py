@@ -48,6 +48,18 @@ def octant_longest_subsequence_count():
                 octant.append(-3)
             else:
                 octant.append(-4)
+
+        max_count = [0]*8
+        for i in range(8):
+            count = 0
+            for j in range(n-2):
+                if octant[j]==int(octants[i]):
+                    count = count+1
+                elif count>=max_count[i]:
+                    max_count[i] = count
+                    count = 0
+                else:
+                    count=0
         
         from openpyxl import Workbook
         book = Workbook()
@@ -61,7 +73,7 @@ def octant_longest_subsequence_count():
             if i==0:#append 2nd line in rows
                 rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i]])
             elif i<9:
-                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"",octants[i-1]])
+                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"",octants[i-1],max_count[i-1]])
             else:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
