@@ -51,6 +51,9 @@ def octant_longest_subsequence_count_with_range():
 
         max_count = [0]*8#list of Longest Subsquence Length element all 0
         counts = [0]*8#list of count of Longest Subsquence Length
+        l1 = []
+        l2 = []
+        l3 = []
         
         for i in range(8):
             count = 0#count start from zero
@@ -65,7 +68,13 @@ def octant_longest_subsequence_count_with_range():
                         counts[i]=counts[i]+1
                         
                     count = 0#for not eqal to privious element make count zero
-            
+            l1.append(octants[i])
+            l1.append("Time")
+            l2.append(max_count[i]) 
+            l2.append("From") 
+            l3.append(counts[i])
+            l3.append("To")
+
 
         from openpyxl import Workbook
         book = Workbook()
@@ -79,9 +88,9 @@ def octant_longest_subsequence_count_with_range():
             if i==0:#append 2nd line in rows
                 rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","Count","Longest Subsquence Length","Count","","Count","Longest Subsquence Length","Count"])
             elif i<9:
-                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"",octants[i-1],max_count[i-1],counts[i-1],""])
-            elif i<17+np.sum(counts):
-                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","","","",""])
+                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"",octants[i-1],max_count[i-1],counts[i-1],"",l1[i-1],l2[i-1],l3[i-1]])
+            #elif i<17+np.sum(counts):
+                #rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","","","","",l1[i-1],l2[i-1],l3[i-1]])
             else:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
