@@ -69,12 +69,12 @@ def octant_longest_subsequence_count():
         sheet = book.active
 
         rows = [
-            ["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","Count","Longest Subsquence Length","Count"]
+            ["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant",""]
         ]#made 2d list
 
         for i in range(n-1):#appending all list in 2d list
             if i==0:#append 2nd line in rows
-                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i]])
+                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","Count","Longest Subsquence Length","Count"])
             elif i<9:
                 rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"",octants[i-1],max_count[i-1],counts[i-1]])
             else:
