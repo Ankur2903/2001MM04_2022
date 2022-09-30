@@ -56,6 +56,7 @@ def octant_longest_subsequence_count_with_range():
         l3 = []
         
         for i in range(8):
+            li =[]
             count = 0#count start from zero
             for j in range(n-2):
                 if octant[j]==int(octants[i]):
@@ -64,9 +65,13 @@ def octant_longest_subsequence_count_with_range():
                     if count>max_count[i]:#for greater count update max count and counts
                         max_count[i] = count
                         counts[i] = 1
+                        li =[]
+                        li.append(time[j-count])
+                        li.append(time[j-1])
                     elif count==max_count[i]:#for eqal count update counts
                         counts[i]=counts[i]+1
-                        
+                        li.append(time[j-count])
+                        li.append(time[j-1])
                     count = 0#for not eqal to privious element make count zero
             l1.append(octants[i])
             l1.append("Time")
@@ -74,6 +79,12 @@ def octant_longest_subsequence_count_with_range():
             l2.append("From") 
             l3.append(counts[i])
             l3.append("To")
+            print(li)
+            for k in range(0,counts[i],1):
+                print(k)
+                l1.append("")
+                l2.append(li[2*k])
+                l3.append(li[2*k+1])
 
 
         from openpyxl import Workbook
