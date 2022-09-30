@@ -1,14 +1,89 @@
-#Help https://youtu.be/H37f_x4wAC0
+import numpy as np
+from openpyxl import load_workbook
 def octant_longest_subsequence_count_with_range():
-###Code
+    try:
+        wb = load_workbook("input_octant_longest_subsequence_with_range.xlsx")
+        sheet = wb["Sheet1"]
+        n = sheet.max_row
+        #n = row_count
+        time =[]#time list
+        u = []#U list
+        v = []#V list
+        w = []#W list
+        u_ = []# u - avg_of_u
+        v_ = []#v - avg_of_v
+        w_ = []#w - avg_of_w
+        octant = []#store octant value
+        octants = ["+1","-1","+2","-2","3","-3","+4","-4"]
 
-from platform import python_version
-ver = python_version()
+        for i in range(2, n + 1):
+            time.append(sheet.cell(row=i, column=1).value)#append time value in time list
+            u.append(sheet.cell(row=i, column=2).value)
+            v.append(sheet.cell(row=i, column=3).value)
+            w.append(sheet.cell(row=i, column=4).value)
 
-if ver == "3.8.10":
-    print("Correct Version Installed")
-else:
-    print("Please install 3.8.10. Instruction are present in the GitHub Repo/Webmail. Url: https://pastebin.com/nvibxmjw")
+        avg_of_u = np.mean(u)
+        avg_of_v = np.mean(v)
+        avg_of_w = np.mean(w)#store avg of u,v,w in avg_of_u,avg_of_v,avg_of_w
 
+        for i in range(n-1):
+            v_.append(v[i]-avg_of_v)#append V-Vavg in v_
+            u_.append(u[i]-avg_of_u)
+            w_.append(w[i]-avg_of_w)
 
+        for i in range(n-1):#for identfy octant
+            if u_[i]>=0 and v_[i]>=0 and w_[i]>0:
+                octant.append(+1)
+            elif u_[i]<0 and v_[i]>=0 and w_[i]>0:
+                octant.append(+2)
+            elif u_[i]<0 and v_[i]<0 and w_[i]>=0:
+                octant.append(+3)
+            elif u_[i]>=0 and v_[i]<0 and w_[i]>=0:
+                octant.append(+4)
+            elif u_[i]>=0 and v_[i]>=0 and w_[i]<=0:
+                octant.append(-1)
+            elif u_[i]<0 and v_[i]>=0 and w_[i]<=0:
+                octant.append(-2)
+            elif u_[i]<0 and v_[i]<0 and w_[i]<0:
+                octant.append(-3)
+            else:
+                octant.append(-4)
+
+        max_count = [0]*8#list of Longest Subsquence Length element all 0
+        counts = [0]*8#list of count of Longest Subsquence Length
+        for i in range(8):
+            count = 0#count start from zero
+            for j in range(n-2):
+                if octant[j]==int(octants[i]):
+                    count = count+1#counting every element
+                else:
+                    if count>max_count[i]:#for greater count update max count and counts
+                        max_count[i] = count
+                        counts[i] = 1
+                    elif count==max_count[i]:#for eqal count update counts
+                        counts[i]=counts[i]+1
+                    count = 0#for not eqal to privious element make count zero
+        
+        from openpyxl import Workbook
+        book = Workbook()
+        sheet = book.active
+
+        rows = [
+            ["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","Count","Longest Subsquence Length","Count"]
+        ]#made 2d list
+
+        for i in range(n-1):#appending all list in 2d list
+            if i==0:#append 2nd line in rows
+                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i]])
+            elif i<9:
+                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"",octants[i-1],max_count[i-1],counts[i-1]])
+            else:
+                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
+    
+        for row in rows:
+            sheet.append(row)
+        book.save('output_octant_longest_subsequence_with_range.xlsx')
+    except:
+        print("File does not exist")
+        exit()
 octant_longest_subsequence_count_with_range()
