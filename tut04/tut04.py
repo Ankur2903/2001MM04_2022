@@ -51,12 +51,12 @@ def octant_longest_subsequence_count_with_range():
 
         max_count = [0]*8#list of Longest Subsquence Length element all 0
         counts = [0]*8#list of count of Longest Subsquence Length
-        l1 = []
-        l2 = []
-        l3 = []
+        l1 = []#list for count part of tut04
+        l2 = []#list for longest subsequebce part and start time of tut04
+        l3 = []#list for count part and end time of tut04
         
         for i in range(8):
-            li =[]
+            li =[]#list for storing start and end time for count
             count = 0#count start from zero
             for j in range(n-2):
                 if octant[j]==int(octants[i]):
@@ -65,26 +65,26 @@ def octant_longest_subsequence_count_with_range():
                     if count>max_count[i]:#for greater count update max count and counts
                         max_count[i] = count
                         counts[i] = 1
-                        li =[]
-                        li.append(time[j-count])
-                        li.append(time[j-1])
+                        li =[]#blank list becouse max count is changed
+                        li.append(time[j-count])#appendint start time
+                        li.append(time[j-1])#appendint end time
                     elif count==max_count[i]:#for eqal count update counts
                         counts[i]=counts[i]+1
-                        li.append(time[j-count])
-                        li.append(time[j-1])
+                        li.append(time[j-count])#appendint start time
+                        li.append(time[j-1])#appendint end time
                     count = 0#for not eqal to privious element make count zero
-            l1.append(octants[i])
-            l1.append("Time")
-            l2.append(max_count[i]) 
-            l2.append("From") 
-            l3.append(counts[i])
-            l3.append("To")
+            l1.append(octants[i])#appending octants in l1
+            l1.append("Time")#appending string Time in l1
+            l2.append(max_count[i]) #appending max_count in l1
+            l2.append("From") #appending string From in l1
+            l3.append(counts[i])#appending counts in l1
+            l3.append("To")#appending string To in l1
             print(li)
             for k in range(0,counts[i],1):
                 print(k)
                 l1.append("")
-                l2.append(li[2*k])
-                l3.append(li[2*k+1])
+                l2.append(li[2*k])#appendint start time in l2
+                l3.append(li[2*k+1])#appendint end time in l3
 
 
         from openpyxl import Workbook
