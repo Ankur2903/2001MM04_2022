@@ -99,9 +99,9 @@ def octant_longest_subsequence_count_with_range():
             if i==0:#append 2nd line in rows
                 rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","Count","Longest Subsquence Length","Count","","Count","Longest Subsquence Length","Count"])
             elif i<9:
-                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"",octants[i-1],max_count[i-1],counts[i-1],"",l1[i-1],l2[i-1],l3[i-1]])
+                rows.append([time[i],u[i],v[i],w[i],"","","",u_[i],v_[i],w_[i],octant[i],"",octants[i-1],max_count[i-1],counts[i-1],"",l1[i-1],l2[i-1],l3[i-1]])
             elif i<17+np.sum(counts):
-                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","","","","",l1[i-1],l2[i-1],l3[i-1]])
+                rows.append([time[i],u[i],v[i],w[i],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","",l1[i-1],l2[i-1],l3[i-1]])
             else:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
