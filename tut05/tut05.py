@@ -153,7 +153,7 @@ def octant_range_names(mod=5000):
             elif i ==6+(n-2)//mod:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","","Octant ID","Octant Name","Count of Rank 1 Mod Values"])
             elif i >=7+(n-2)//mod and i<=14+(n-2)//mod:
-                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
+                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","",list_[i-(7+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(7+(n-2)//mod)])]])
             else:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
