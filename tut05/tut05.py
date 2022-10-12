@@ -150,6 +150,10 @@ def octant_range_names(mod=5000):
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"User Input","Mod "+ str(mod)])
             elif i>=2 and i<=2+(n-2)//mod:#append (n-2)//mod lines in rows(represent count of octants in per gap of mod)
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",str((i-2)*mod)+"-"+str(np.minimum((i-1)*mod-1,n-2)),octant_2d[0][i-2],octant_2d[1][i-2],octant_2d[2][i-2],octant_2d[3][i-2],octant_2d[4][i-2],octant_2d[5][i-2],octant_2d[6][i-2],octant_2d[7][i-2],rank_2d[i-2][0],rank_2d[i-2][1],rank_2d[i-2][2],rank_2d[i-2][3],rank_2d[i-2][4],rank_2d[i-2][5],rank_2d[i-2][6],rank_2d[i-2][7],rank_1[i-1],octant_name_id_mapping[str(rank_1[i-1])]])     
+            elif i ==6+(n-2)//mod:
+                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","","Octant ID","Octant Name","Count of Rank 1 Mod Values"])
+            elif i >=7+(n-2)//mod and i<=14+(n-2)//mod:
+                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
             else:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
