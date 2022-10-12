@@ -4,6 +4,7 @@ import numpy as np
 def octant_range_names(mod=5000):
         from openpyxl import load_workbook
     #try:
+        octant_name_id_mapping = {"1":"Internal outward interaction", "-1":"External outward interaction", "2":"External Ejection", "-2":"Internal Ejection", "3":"External inward interaction", "-3":"Internal inward interaction", "4":"Internal sweep", "-4":"External sweep"}
         wb = load_workbook("octant_input.xlsx")
         sheet = wb["Sheet1"]
         n = sheet.max_row
@@ -144,11 +145,11 @@ def octant_range_names(mod=5000):
 
         for i in range(n-1):
             if i==0:#append 2nd line in rows
-                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7],rank_total[0],rank_total[1],rank_total[2],rank_total[3],rank_total[4],rank_total[5],rank_total[6],rank_total[7],rank_1[0]])
+                rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7],rank_total[0],rank_total[1],rank_total[2],rank_total[3],rank_total[4],rank_total[5],rank_total[6],rank_total[7],rank_1[0],octant_name_id_mapping[str(rank_1[0])]])
             elif i==1:#append 3nd line in rows
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"User Input","Mod "+ str(mod)])
             elif i>=2 and i<=2+(n-2)//mod:#append (n-2)//mod lines in rows(represent count of octants in per gap of mod)
-                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",str((i-2)*mod)+"-"+str(np.minimum((i-1)*mod-1,n-2)),octant_2d[0][i-2],octant_2d[1][i-2],octant_2d[2][i-2],octant_2d[3][i-2],octant_2d[4][i-2],octant_2d[5][i-2],octant_2d[6][i-2],octant_2d[7][i-2],rank_2d[i-2][0],rank_2d[i-2][1],rank_2d[i-2][2],rank_2d[i-2][3],rank_2d[i-2][4],rank_2d[i-2][5],rank_2d[i-2][6],rank_2d[i-2][7],rank_1[i-1]])     
+                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",str((i-2)*mod)+"-"+str(np.minimum((i-1)*mod-1,n-2)),octant_2d[0][i-2],octant_2d[1][i-2],octant_2d[2][i-2],octant_2d[3][i-2],octant_2d[4][i-2],octant_2d[5][i-2],octant_2d[6][i-2],octant_2d[7][i-2],rank_2d[i-2][0],rank_2d[i-2][1],rank_2d[i-2][2],rank_2d[i-2][3],rank_2d[i-2][4],rank_2d[i-2][5],rank_2d[i-2][6],rank_2d[i-2][7],rank_1[i-1],octant_name_id_mapping[str(rank_1[i-1])]])     
             else:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
@@ -158,7 +159,6 @@ def octant_range_names(mod=5000):
     #except:
         #print("File does not exist")
         #exit()
-    #octant_name_id_mapping = {"1":"Internal outward interaction", "-1":"External outward interaction", "2":"External Ejection", "-2":"Internal Ejection", "3":"External inward interaction", "-3":"Internal inward interaction", "4":"Internal sweep", "-4":"External sweep"}
 mod=5000 
 octant_range_names(mod)
 end_time = datetime.now()
