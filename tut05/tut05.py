@@ -73,7 +73,7 @@ def octant_range_names(mod=5000):
 
         rank_1 = []
         
-        rank_total = []
+        rank_total = []#ranking for total count
         for i in range(8):
             a =1
             for j in range(8):
@@ -122,18 +122,18 @@ def octant_range_names(mod=5000):
             else:
                 octant_2d[7][(n-2)//mod] = octant_2d[7][(n-2)//mod] +1  
         
-        count_ = [0]*8
-        rank_2d = []
-        for i in range(((n-2)//mod)+1):
+        count_ = [0]*8# list for count of Rank 1 Mod Value
+        rank_2d = []#2d list for ranking in every mod gap
+        for i in range(((n-2)//mod)+1):#for every mod interval
             rank_mod = []
-            for j in range(8):
+            for j in range(8):#take a value for compare
                 a = 1
-                for k in range(8):
+                for k in range(8):#comparing with other value
                     if octant_2d[j][i]<octant_2d[k][i]:
-                        a = a+1
+                        a = a+1#increasing rank
                 if a==1:
-                    rank_1.append(list_[j])
-                    count_[j] = count_[j] +1
+                    rank_1.append(list_[j])#storing rank 1 octant
+                    count_[j] = count_[j] +1#counting rank 1 octant
                 rank_mod.append(a)
             rank_2d.append(rank_mod)
         
