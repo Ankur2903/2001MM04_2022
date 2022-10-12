@@ -121,7 +121,8 @@ def octant_range_names(mod=5000):
                 octant_2d[5][(n-2)//mod] = octant_2d[5][(n-2)//mod] +1
             else:
                 octant_2d[7][(n-2)//mod] = octant_2d[7][(n-2)//mod] +1  
-
+        
+        count_ = [0]*8
         rank_2d = []
         for i in range(((n-2)//mod)+1):
             rank_mod = []
@@ -132,6 +133,7 @@ def octant_range_names(mod=5000):
                         a = a+1
                 if a==1:
                     rank_1.append(list_[j])
+                    count_[j] = count_[j] +1
                 rank_mod.append(a)
             rank_2d.append(rank_mod)
         
@@ -153,7 +155,7 @@ def octant_range_names(mod=5000):
             elif i ==6+(n-2)//mod:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","","Octant ID","Octant Name","Count of Rank 1 Mod Values"])
             elif i >=7+(n-2)//mod and i<=14+(n-2)//mod:
-                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","",list_[i-(7+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(7+(n-2)//mod)])]])
+                rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","",list_[i-(7+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(7+(n-2)//mod)])],count_[i-(7+(n-2)//mod)]])
             else:
                 rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
     
