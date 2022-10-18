@@ -91,10 +91,10 @@ def attendance_report():
         with open(rollNo[i]+".csv","w",newline ="") as file:
             writer = csv.writer(file)
             writer.writerow(["Roll","Name","total_lecture_taken","attendance_count_actual","attendance_count_fake","attendance_count_absent","Percentage (attendance_count_actual/total_lecture_taken) 2 digit decimal "])
-            writer.writerow([rollNo[i],name[i],"14",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]]])
+            writer.writerow([rollNo[i],name[i],"14",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]],14-dict_attendance_count_actual[rollNo[i]],np.round_((dict_attendance_count_actual[rollNo[i]]/14)*100,2)])
         with open("attendanc_report_consolidated.csv","a",newline ="") as file:
             writer = csv.writer(file)
-            writer.writerow([rollNo[i],name[i],"14",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]]])
+            writer.writerow([rollNo[i],name[i],"14",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]],14-dict_attendance_count_actual[rollNo[i]],np.round_((dict_attendance_count_actual[rollNo[i]]/14)*100,2)])
         if i<len(name_1):
             with open("attendanc_report_duplicate.csv","a",newline ="") as file:
                 writer = csv.writer(file)
