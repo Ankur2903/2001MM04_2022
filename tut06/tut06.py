@@ -28,7 +28,7 @@ def attendance_report():
             attendance.append(x[1])
             m = m+1
 
-    list_class =["28/07","01/08","04/08","08/08","11/08","15/08","18/08","22/08","25/08","29/08","01/09","05/09","08/09","12/09"]
+    list_class =["01/08","04/08","08/08","22/08","25/08","29/08","01/09","05/09","08/09","12/09"]
     dict_rollno ={}
     dict_attendance_count_actual = {}
     dict_attendance_count_fake = {}
@@ -40,20 +40,21 @@ def attendance_report():
     timestamp_1 = ["Timestamp"]
     rollNo_1 = ["Rollno"]
     name_1 = ["name"]
-
-    dict_rollno[attendance[1][0:8]]+=1
-    if timestamp[1][0:5] in list_class and timestamp[1][11:13]=="14":
-        dict_attendance_count_actual[attendance[1][0:8]]+=1
-    else:
-        dict_attendance_count_fake[attendance[1][0:8]]+=1
+    if timestamp[1][0:5] in list_class:
+        if timestamp[1][11:13]=="14":
+            dict_rollno[attendance[1][0:8]]+=1
+            dict_attendance_count_actual[attendance[1][0:8]]+=1
+        else:
+            dict_attendance_count_fake[attendance[1][0:8]]+=1
     x = 1
     for i in range(2,m):
-        if attendance[i]=='' or attendance[i][0:8] not in dict_rollno.keys():
+        if i!=m-1 and (attendance[i]=='' or attendance[i][0:8] not in dict_rollno.keys() or timestamp[i][0:5] not in list_class):
             continue
-        if timestamp[i][0:10]==timestamp[x][0:10]:
-            dict_rollno[attendance[i][0:8]]+=1
-            if timestamp[i][0:5] in list_class and timestamp[i][11:13]=="14":
-                dict_attendance_count_actual[attendance[i][0:8]]+=1
+        if timestamp[i][0:10]==timestamp[x][0:10] and i!=m-1:
+            if timestamp[i][11:13]=="14":
+                dict_rollno[attendance[i][0:8]]+=1
+                if dict_rollno[attendance[i][0:8]]==1:
+                    dict_attendance_count_actual[attendance[i][0:8]]+=1
             else:
                 dict_attendance_count_fake[attendance[i][0:8]]+=1
         else:
@@ -66,10 +67,10 @@ def attendance_report():
             for k in range(1,n):
                 dict_rollno[rollNo[k]]=0
             if timestamp[i][0:5] in list_class and timestamp[i][11:13]=="14":
+                dict_rollno[attendance[i][0:8]]+=1
                 dict_attendance_count_actual[attendance[i][0:8]]+=1
             else:
                 dict_attendance_count_fake[attendance[i][0:8]]+=1
-            dict_rollno[attendance[i][0:8]]+=1
             x = i
 
     if os.path.exists("output"):
@@ -91,10 +92,10 @@ def attendance_report():
         with open(rollNo[i]+".csv","w",newline ="") as file:
             writer = csv.writer(file)
             writer.writerow(["Roll","Name","total_lecture_taken","attendance_count_actual","attendance_count_fake","attendance_count_absent","Percentage (attendance_count_actual/total_lecture_taken) 2 digit decimal "])
-            writer.writerow([rollNo[i],name[i],"14",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]],14-dict_attendance_count_actual[rollNo[i]],np.round_((dict_attendance_count_actual[rollNo[i]]/14)*100,2)])
+            writer.writerow([rollNo[i],name[i],"10",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]],10-dict_attendance_count_actual[rollNo[i]],np.round_((dict_attendance_count_actual[rollNo[i]]/10)*100,2)])
         with open("attendanc_report_consolidated.csv","a",newline ="") as file:
             writer = csv.writer(file)
-            writer.writerow([rollNo[i],name[i],"14",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]],14-dict_attendance_count_actual[rollNo[i]],np.round_((dict_attendance_count_actual[rollNo[i]]/14)*100,2)])
+            writer.writerow([rollNo[i],name[i],"10",dict_attendance_count_actual[rollNo[i]],dict_attendance_count_fake[rollNo[i]],10-dict_attendance_count_actual[rollNo[i]],np.round_((dict_attendance_count_actual[rollNo[i]]/10)*100,2)])
         if i<len(name_1):
             with open("attendanc_report_duplicate.csv","a",newline ="") as file:
                 writer = csv.writer(file)
