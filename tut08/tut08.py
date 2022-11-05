@@ -5,6 +5,7 @@ import os
 os.system("cls")
 
 def scorecard():
+	file1 = open("Scorecard.txt","w")
 	for k in range(2):
 		if k==0:
 			print("hi1")
@@ -74,14 +75,16 @@ def scorecard():
 			i+=1
 		for i in range(1,len(list_sc[1])):
 			list_sc[6].append(np.round_((list_sc[2][i]/list_sc[3][i])*100,2))
+
+		file1 = open("Scorecard.txt","a")
+		for i in range(0,len(list_sc[0])):
+			file1.write(f"{list_sc[0][i] : <25}{list_sc[1][i] : <40}{list_sc[2][i] : <10}{list_sc[3][i] : <10}{list_sc[4][i] : <10}{list_sc[5][i] : <10}{list_sc[6][i] : <10}")
+			file1.write("\n")
+		file1.write("\n\n")
 		
 		print(list_sc)
 
 	
-	file1 = open("Scorecard.txt","w")
-	for i in range(len(list_sc[0])):
-		file1.write(f"{list_sc[0][i] : <25}{list_sc[1][i] : <40}{list_sc[2][i] : <10}{list_sc[3][i] : <10}{list_sc[4][i] : <10}{list_sc[5][i] : <10}{list_sc[6][i] : <10}")
-		file1.write("\n")
 	
 
 scorecard()
