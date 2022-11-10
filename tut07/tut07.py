@@ -128,19 +128,20 @@ def octant_analysis(mod=5000):
         
 		line1 = []
 		for i in range(n-1):#made a list for append -from- in rows list
-			if  i%13==0 and i<((n-2)//mod +2)*14+2:
+			if  i%13==0 and i<((n-2)//mod +1)*14+2:
 				line1.append("From")
 			else:
 				line1.append("")    
 		
 		line2 = []
-		for i in range(n-1):#made a list for append [1,-1,2,-2,3,-3,4,-4] and range of mod in row list
+		for i in range(n+2):#made a list for append [1,-1,2,-2,3,-3,4,-4] and range of mod in row list
 			if i%13==1 and i<((n-2)//mod +2)*13 and i!=1:
 				line2.append(str((i//13-1)*mod)+"-"+str(np.minimum((i//13)*mod-1,n-2)))#append range
 			elif i<((n-2)//mod +2)*13:
 				line2.append(octants[i%13])#append [1,-1,2,-2,3,-3,4,-4]
 			else:
 				line2.append("")#append blank
+				
 		
 		def function1(first, last,a):#define a function for count countinous a,(1,-1,2,-2,3,-3,4,-4)and put them in list named line
 			line = [0]*8
@@ -162,6 +163,40 @@ def octant_analysis(mod=5000):
 				if octant[i]==a and octant[i+1]==-4:#count countinous a,-4
 					line[7] = line[7] +1
 			return line
+
+		linenext = [[],[],[],[],[],[],[],[]]
+		linenext[0].append("To")
+		for k in range(1,8):
+			linenext[k].append("")
+		for k in range(8):
+			linenext[k].append(octants1[k])
+		for j in range(8):
+			list1 =  function1(0,n-2,int(octants1[j]))
+			for z in range(8):
+				linenext[z].append(list1[z])
+		for k in range(8):
+			linenext[k].append("")
+			linenext[k].append("")
+			linenext[k].append("")
+
+		for i in range((n-2)//mod+1):
+			linenext[0].append("To")
+			for k in range(1,8):
+				linenext[k].append("")
+			for k in range(8):
+				linenext[k].append(octants1[k])
+			for j in range(8):
+				list1 =  function1(i*mod,np.minimum((i+1)*mod,n-2),int(octants1[j]))
+				for z in range(8):
+					linenext[z].append(list1[z])
+			for k in range(8):
+				linenext[k].append("")
+				linenext[k].append("")
+				linenext[k].append("")
+
+		for i in range(n):
+			for k in range(8):
+				linenext[k].append("")
 
 		max_count = [0]*8#list of Longest Subsquence Length element all 0
 		counts = [0]*8#list of count of Longest Subsquence Length
@@ -188,6 +223,41 @@ def octant_analysis(mod=5000):
 			if a==1:
 				rank_1.append(list_[i])
 			rank_total.append(a)
+			
+		max_count = [0]*8#list of Longest Subsquence Length element all 0
+		counts = [0]*8#list of count of Longest Subsquence Length
+		l1 = []#list for count part of tut04
+		l2 = []#list for longest subsequebce part and start time of tut04
+		l3 = []#list for count part and end time of tut04
+			
+		for i in range(8):
+			li =[]#list for storing start and end time for count
+			count = 0#count start from zero
+			for j in range(n-2):
+				if octant[j]==int(octants1[i]):
+					count = count+1#counting every element
+				else:
+					if count>max_count[i]:#for greater count update max count and counts
+						max_count[i] = count
+						counts[i] = 1
+						li =[]#blank list becouse max count is changed
+						li.append(time[j-count])#appendint start time
+						li.append(time[j-1])#appendint end time
+					elif count==max_count[i]:#for eqal count update counts
+						counts[i]=counts[i]+1
+						li.append(time[j-count])#appendint start time
+						li.append(time[j-1])#appendint end time
+					count = 0#for not eqal to privious element make count zero
+			l1.append(octants1[i])#appending octants in l1
+			l1.append("Time")#appending string Time in l1
+			l2.append(max_count[i]) #appending max_count in l1
+			l2.append("From") #appending string From in l1
+			l3.append(counts[i])#appending counts in l1
+			l3.append("To")#appending string To in l1
+			for k in range(0,counts[i],1):
+				l1.append("")
+				l2.append(li[2*k])#appendint start time in l2
+				l3.append(li[2*k+1])#appendint end time in l3
 						
 		count_ = [0]*8# list for count of Rank 1 Mod Value
 		rank_2d = []#2d list for ranking in every mod gap
@@ -204,7 +274,14 @@ def octant_analysis(mod=5000):
 				rank_mod.append(a)
 			rank_2d.append(rank_mod)
 
-		rows = [["","","","","","","","","","","","","","Overall Octant Count","","","","","","","","","","","","","","","","","","","","","Overall Transition Count","","","","","","","","","","Longest Subsquence Length","","","","Longest Subsquence Length with Range",],["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","","","","","","","","","","","","","","","","","","","","","","","","To"],[time[0],u[0],v[0],w[0],avg_of_u,avg_of_v,avg_of_w,u_[0],v_[0],w_[0],octant[0],"","","Octant ID","+1","-1","+2","-2","+3","-3","+4","-4","Rank Octant 1","Rank Octant -1","Rank Octant 2","Rank Octant -2","Rank Octant 3","Rank Octant -3","Rank Octant 4","Rank Octant -4","Rank 1 Octant ID","Rank 1 Octant Name","","","octant","+1","-1","+2","-2","+3","-3","+4","-4","","Octant","Longest Subsquence Length","Count","","Longest Subsquence Length","Count"]]#made 2d list
+		for i in range(n):
+			l1.append("")
+			l2.append("")
+			l3.append("")
+
+
+
+		rows = [["","","","","","","","","","","","","","Overall Octant Count","","","","","","","","","","","","","","","","","","","","","Overall Transition Count","","","","","","","","","","Longest Subsquence Length","","","","Longest Subsquence Length with Range",],["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","","","","","","","","","","","","","","","","","","","","","","","","To"],[time[0],u[0],v[0],w[0],avg_of_u,avg_of_v,avg_of_w,u_[0],v_[0],w_[0],octant[0],"","","Octant ID","+1","-1","+2","-2","+3","-3","+4","-4","Rank Octant 1","Rank Octant -1","Rank Octant 2","Rank Octant -2","Rank Octant 3","Rank Octant -3","Rank Octant 4","Rank Octant -4","Rank 1 Octant ID","Rank 1 Octant Name","","","octant","+1","-1","+2","-2","+3","-3","+4","-4","","Octant","Longest Subsquence Length","Count","","Octant","Longest Subsquence Length","Count"]]#made 2d list
 		os.chdir(curr)
 		os.chdir("output")
 
@@ -214,19 +291,20 @@ def octant_analysis(mod=5000):
 
 		for i in range(n-2):
 			if i==0:#append 2nd line in rows
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i+1],v_[i+1],w_[i+1],octant[i+1],"","Mod"+str(mod),"Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7],rank_total[0],rank_total[1],rank_total[2],rank_total[3],rank_total[4],rank_total[5],rank_total[6],rank_total[7],rank_1[0],octant_name_id_mapping[str(rank_1[0])]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i+1],v_[i+1],w_[i+1],octant[i+1],"","Mod"+str(mod),"Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7],rank_total[0],rank_total[1],rank_total[2],rank_total[3],rank_total[4],rank_total[5],rank_total[6],rank_total[7],rank_1[0],octant_name_id_mapping[str(rank_1[0])],"",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
 			elif i>=1 and i<=1+(n-2)//mod:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","",str((i-1)*mod)+"-"+str(np.minimum((i)*mod-1,n-2)),octant_2d[0][i-1],octant_2d[1][i-1],octant_2d[2][i-1],octant_2d[3][i-1],octant_2d[4][i-1],octant_2d[5][i-1],octant_2d[6][i-1],octant_2d[7][i-1],rank_2d[i-1][0],rank_2d[i-1][1],rank_2d[i-1][2],rank_2d[i-1][3],rank_2d[i-1][4],rank_2d[i-1][5],rank_2d[i-1][6],rank_2d[i-1][7],rank_1[i],octant_name_id_mapping[str(rank_1[i])]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","",str((i-1)*mod)+"-"+str(np.minimum((i)*mod-1,n-2)),octant_2d[0][i-1],octant_2d[1][i-1],octant_2d[2][i-1],octant_2d[3][i-1],octant_2d[4][i-1],octant_2d[5][i-1],octant_2d[6][i-1],octant_2d[7][i-1],rank_2d[i-1][0],rank_2d[i-1][1],rank_2d[i-1][2],rank_2d[i-1][3],rank_2d[i-1][4],rank_2d[i-1][5],rank_2d[i-1][6],rank_2d[i-1][7],rank_1[i],octant_name_id_mapping[str(rank_1[i])],"",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
 			elif i==3+(n-2)//mod:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","Octant ID","Octant Name","Count of Rank 1 Mod Values"])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","Octant ID","Octant Name","Count of Rank 1 Mod Values","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
 			elif i>=4+(n-2)//mod and i<=11+(n-2)//mod:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","",list_[i-(4+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(4+(n-2)//mod)])],count_[i-(4+(n-2)//mod)]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","",list_[i-(4+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(4+(n-2)//mod)])],count_[i-(4+(n-2)//mod)],"","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
 			else:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","","","","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
 		for row in rows:
 			sheet.append(row)
 		book.save(list)
 		os.chdir(curr)
+		break
 
 
 mod=5000
