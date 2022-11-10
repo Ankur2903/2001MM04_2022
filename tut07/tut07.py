@@ -3,22 +3,24 @@ from tkinter import N
 os.system("cls")
 import numpy as np
 from openpyxl import load_workbook
+from openpyxl.styles import PatternFill
+from openpyxl.formatting.rule import CellIsRule
 from datetime import datetime
 start_time = datetime.now()
 
 def octant_analysis(mod=5000):
-	curr  = os.getcwd()
+	curr  = os.getcwd()#copy current folder adderss in curr
 	if os.path.exists("output"):
 		for f in os.listdir("output"):
-			os.remove(os.path.join("output",f))
-		os.rmdir("output")
-	os.mkdir(curr.replace('\\','/')+"/output/")
+			os.remove(os.path.join("output",f))#delete all file in output folder
+		os.rmdir("output")#delete output folder
+	os.mkdir(curr.replace('\\','/')+"/output/")#make output folder
 	os.chdir("input")
 	file_li = os. listdir()
-	print(file_li)
+	print(file_li)#storing all file name of input folder in list
 	os.chdir(curr)
 	for list in file_li:
-		os.chdir("input")
+		os.chdir("input")#taking input
 		wb = load_workbook(list)
 		sheet = wb.active
 		print(list)
@@ -142,7 +144,7 @@ def octant_analysis(mod=5000):
 			else:
 				line2.append("")#append blank
 				
-		
+		list_of_max_count = []
 		def function1(first, last,a):#define a function for count countinous a,(1,-1,2,-2,3,-3,4,-4)and put them in list named line
 			line = [0]*8
 			for i in range (first,last):
@@ -162,10 +164,11 @@ def octant_analysis(mod=5000):
 					line[6] = line[6] +1
 				if octant[i]==a and octant[i+1]==-4:#count countinous a,-4
 					line[7] = line[7] +1
+			list_of_max_count.append(max(line))
 			return line
-
+        
 		linenext = [[],[],[],[],[],[],[],[]]
-		linenext[0].append("To")
+		linenext[0].append("To")#storing all list in 2dlist for overall mod transition count
 		for k in range(1,8):
 			linenext[k].append("")
 		for k in range(8):
@@ -179,7 +182,7 @@ def octant_analysis(mod=5000):
 			linenext[k].append("")
 			linenext[k].append("")
 
-		for i in range((n-2)//mod+1):
+		for i in range((n-2)//mod+1):#storing all list in 2dlist for overall mod transition count
 			linenext[0].append("To")
 			for k in range(1,8):
 				linenext[k].append("")
@@ -301,11 +304,21 @@ def octant_analysis(mod=5000):
 			elif i>=4+(n-2)//mod and i<=11+(n-2)//mod:
 				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","",list_[i-(4+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(4+(n-2)//mod)])],count_[i-(4+(n-2)//mod)],"","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"",octants1[i],max_count[i],counts[i],"",l1[i],l2[i],l3[i]])
 			else:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","","","","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"",octants1[i],max_count[i],counts[i],"",l1[i],l2[i],l3[i]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","","","","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
 		for row in rows:
 			sheet.append(row)
-		book.save(list)
+		fill = PatternFill(start_color='FFFF00',end_color='FFFF00',fill_type='solid')
+		sheet.conditional_formatting.add(f"W4:AE{2+(n-2)//mod+4}", CellIsRule(operator='equal', formula=[1], fill=fill))
+		p=4
+		for i in range(2+(n-2)//mod):
+			for j in range(8):
+				sheet.conditional_formatting.add(f"AJ{p}:AQ{p}", CellIsRule(operator='equal', formula=[list_of_max_count[i*8+j]], fill=fill))
+				p=p+1
+			p=p+5
+		book.save(list[:-5]+" cm_vel_octant_analysis_mod_"+str(mod)+".xlsx")
+	
 		os.chdir(curr)
+		break
 
 
 mod=5000
