@@ -35,6 +35,7 @@ def octant_analysis(mod=5000):
 		octants = ["Mod Transition Count","","Count","+1","-1","+2","-2","+3","-3","+4","-4"," "," "]
 		list_ = [1,-1,2,-2,3,-3,4,-4]
 		octants1 = ["+1","-1","+2","-2","3","-3","+4","-4"]
+		octant_name_id_mapping = {"1":"Internal outward interaction", "-1":"External outward interaction", "2":"External Ejection", "-2":"Internal Ejection", "3":"External inward interaction", "-3":"Internal inward interaction", "4":"Internal sweep", "-4":"External sweep"}
 		
 		for i in range(2, n + 1):
 			time.append(sheet.cell(row=i, column=1).value)#append time value in time list
@@ -176,8 +177,34 @@ def octant_analysis(mod=5000):
 					elif count==max_count[i]:#for eqal count update counts
 						counts[i]=counts[i]+1
 						count = 0#for not eqal to privious element make count zero
-			
-		rows = [["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","","+1","-1","+2","-2","+3","-3","+4","-4"]]#made 2d list
+						
+		rank_1 = []
+		rank_total = []#ranking for total count
+		for i in range(8):
+			a =1
+			for j in range(8):
+				if total[i]<total[j]:
+					a = a+1
+			if a==1:
+				rank_1.append(list_[i])
+			rank_total.append(a)
+						
+		count_ = [0]*8# list for count of Rank 1 Mod Value
+		rank_2d = []#2d list for ranking in every mod gap
+		for i in range(((n-2)//mod)+1):#for every mod interval
+			rank_mod = []
+			for j in range(8):#take a value for compare
+				a = 1
+				for k in range(8):#comparing with other value
+					if octant_2d[j][i]<octant_2d[k][i]:
+						a = a+1#increasing rank
+				if a==1:
+					rank_1.append(list_[j])#storing rank 1 octant
+					count_[j] = count_[j] +1#counting rank 1 octant
+				rank_mod.append(a)
+			rank_2d.append(rank_mod)
+
+		rows = [["","","","","","","","","","","","","","Overall Octant Count","","","","","","","","","","","","","","","","","","","","","Overall Transition Count","","","","","","","","","","Longest Subsquence Length","","","","Longest Subsquence Length with Range",],["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","","","","","","","","","","","","","","","","","","","","","","","","To"],[time[0],u[0],v[0],w[0],avg_of_u,avg_of_v,avg_of_w,u_[0],v_[0],w_[0],octant[0],"","","Octant ID","+1","-1","+2","-2","+3","-3","+4","-4","Rank Octant 1","Rank Octant -1","Rank Octant 2","Rank Octant -2","Rank Octant 3","Rank Octant -3","Rank Octant 4","Rank Octant -4","Rank 1 Octant ID","Rank 1 Octant Name","","","octant","+1","-1","+2","-2","+3","-3","+4","-4","","Octant","Longest Subsquence Length","Count","","Longest Subsquence Length","Count"]]#made 2d list
 		os.chdir(curr)
 		os.chdir("output")
 
@@ -185,40 +212,17 @@ def octant_analysis(mod=5000):
 		book = Workbook()
 		sheet = book.active
 
-		for i in range(n-1):
+		for i in range(n-2):
 			if i==0:#append 2nd line in rows
-				rows.append([time[i],u[i],v[i],w[i],avg_of_u,avg_of_v,avg_of_w,u_[i],v_[i],w_[i],octant[i],"","Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7]])
-			elif i==1:#append 3nd line in rows
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"User Input","Mod "+ str(mod)])
-			elif i==2:#append 4nd line in rows
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",str((i-2)*mod)+"-"+str((i-1)*mod-1),octant_2d[0][i-2],octant_2d[1][i-2],octant_2d[2][i-2],octant_2d[3][i-2],octant_2d[4][i-2],octant_2d[5][i-2],octant_2d[6][i-2],octant_2d[7][i-2]])
-			elif i>2 and i<=2+(n-2)//mod:#append (n-2)//mod lines in rows(represent count of octants in per gap of mod)
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",str((i-2)*mod)+"-"+str(np.minimum((i-1)*mod-1,n-2)),octant_2d[0][i-2],octant_2d[1][i-2],octant_2d[2][i-2],octant_2d[3][i-2],octant_2d[4][i-2],octant_2d[5][i-2],octant_2d[6][i-2],octant_2d[7][i-2]])
-			elif i==3+(n-2)//mod:#append a line alone becouse of one word (Verified)
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","Verified",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7]])
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]]) #for blank space juse below       
-			elif i==4+(n-2)//mod:
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
-			elif i==5+(n-2)//mod:#append a line alone becouse of one word (Overall Transition Count)
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"","Overall Transition Count"])
-			elif (i-(6+(n-2)//mod))%13==0 and i<((n-2)//mod +2)*14 +4:#append a line alone becouse of one word (To)
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",line2[i+2-(7+(n-2)//mod)],"To"])
-			elif (i-(7+(n-2)//mod))%13==0 and i<((n-2)//mod +2)*14 +4:#append a list which contain "+1","-1","+2","-2","+3","-3","+4","-4" in every 13th line
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],"",line2[i+2-(7+(n-2)//mod)],"+1","-1","+2","-2","+3","-3","+4","-4"])
-			elif (i-(8+(n-2)//mod))%13>=0 and (i-(8+(n-2)//mod))%13<8 and i<((n-2)//mod +2)*3 +4:
-				b = list_[(i-(8+(n-2)//mod))%13]#list_[1,-1,2,-2,3,-3,4,-4]
-				#print(b)
-				list1 = function1(0,n-2,b)#count b,(1,-1,2,-2,3,-3,4,-4) from 0 to end in octant list and make a list named list1[0]
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],line1[i-(8+(n-2)//mod)],line2[i+2-(7+(n-2)//mod)],list1[0],list1[1],list1[2],list1[3],list1[4],list1[5],list1[6],list1[7]])
-			elif (i-(8+(n-2)//mod))%13>=0 and (i-(8+(n-2)//mod))%13<8 and i<((n-2)//mod +2)*14 +4:
-				b = list_[(i-(8+(n-2)//mod))%13]#count b,(1,-1,2,-2,3,-3,4,-4) from ((i-(8+(n-2)//mod))//13-1)*mod to min(n-2,((i-(8+(n-2)//mod))//13)*mod-1),b in octant list and make a list named list1[0]
-				list1 = function1(((i-(8+(n-2)//mod))//13-1)*mod,min(n-2,((i-(8+(n-2)//mod))//13)*mod),b)
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],line1[i-(8+((n-2)//mod))],line2[i+2-(7+(n-2)//mod)],list1[0],list1[1],list1[2],list1[3],list1[4],list1[5],list1[6],list1[7]])
-			elif i<((n-2)//mod +2)*14 +4:
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i],line1[i-(8+((n-2)//mod))],line2[i+2-(7+(n-2)//mod)]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i+1],v_[i+1],w_[i+1],octant[i+1],"","Mod"+str(mod),"Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7],rank_total[0],rank_total[1],rank_total[2],rank_total[3],rank_total[4],rank_total[5],rank_total[6],rank_total[7],rank_1[0],octant_name_id_mapping[str(rank_1[0])]])
+			elif i>=1 and i<=1+(n-2)//mod:
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","",str((i-1)*mod)+"-"+str(np.minimum((i)*mod-1,n-2)),octant_2d[0][i-1],octant_2d[1][i-1],octant_2d[2][i-1],octant_2d[3][i-1],octant_2d[4][i-1],octant_2d[5][i-1],octant_2d[6][i-1],octant_2d[7][i-1],rank_2d[i-1][0],rank_2d[i-1][1],rank_2d[i-1][2],rank_2d[i-1][3],rank_2d[i-1][4],rank_2d[i-1][5],rank_2d[i-1][6],rank_2d[i-1][7],rank_1[i],octant_name_id_mapping[str(rank_1[i])]])
+			elif i==3+(n-2)//mod:
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","Octant ID","Octant Name","Count of Rank 1 Mod Values"])
+			elif i>=4+(n-2)//mod and i<=11+(n-2)//mod:
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","",list_[i-(4+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(4+(n-2)//mod)])],count_[i-(4+(n-2)//mod)]])
 			else:
-				rows.append([time[i],u[i],v[i],w[i]," "," "," ",u_[i],v_[i],w_[i],octant[i]])
-				
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i]])
 		for row in rows:
 			sheet.append(row)
 		book.save(list)
