@@ -278,8 +278,10 @@ def octant_analysis(mod=5000):
 			l1.append("")
 			l2.append("")
 			l3.append("")
-
-
+			max_count.append("")
+			counts.append("")
+			octants1.append("")
+			
 
 		rows = [["","","","","","","","","","","","","","Overall Octant Count","","","","","","","","","","","","","","","","","","","","","Overall Transition Count","","","","","","","","","","Longest Subsquence Length","","","","Longest Subsquence Length with Range",],["Time","U","V","W","U Avg","V Avg","W Avg","U'=U - U avg","V'=V - V avg","W'=W - w avg","Ocatant","","","","","","","","","","","","","","","","","","","","","","","","","To"],[time[0],u[0],v[0],w[0],avg_of_u,avg_of_v,avg_of_w,u_[0],v_[0],w_[0],octant[0],"","","Octant ID","+1","-1","+2","-2","+3","-3","+4","-4","Rank Octant 1","Rank Octant -1","Rank Octant 2","Rank Octant -2","Rank Octant 3","Rank Octant -3","Rank Octant 4","Rank Octant -4","Rank 1 Octant ID","Rank 1 Octant Name","","","octant","+1","-1","+2","-2","+3","-3","+4","-4","","Octant","Longest Subsquence Length","Count","","Octant","Longest Subsquence Length","Count"]]#made 2d list
 		os.chdir(curr)
@@ -291,20 +293,19 @@ def octant_analysis(mod=5000):
 
 		for i in range(n-2):
 			if i==0:#append 2nd line in rows
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i+1],v_[i+1],w_[i+1],octant[i+1],"","Mod"+str(mod),"Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7],rank_total[0],rank_total[1],rank_total[2],rank_total[3],rank_total[4],rank_total[5],rank_total[6],rank_total[7],rank_1[0],octant_name_id_mapping[str(rank_1[0])],"",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i+1],v_[i+1],w_[i+1],octant[i+1],"","Mod"+str(mod),"Overall Count",total[0],total[1],total[2],total[3],total[4],total[5],total[6],total[7],rank_total[0],rank_total[1],rank_total[2],rank_total[3],rank_total[4],rank_total[5],rank_total[6],rank_total[7],rank_1[0],octant_name_id_mapping[str(rank_1[0])],"",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"",octants1[i],max_count[i],counts[i],"",l1[i],l2[i],l3[i]])
 			elif i>=1 and i<=1+(n-2)//mod:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","",str((i-1)*mod)+"-"+str(np.minimum((i)*mod-1,n-2)),octant_2d[0][i-1],octant_2d[1][i-1],octant_2d[2][i-1],octant_2d[3][i-1],octant_2d[4][i-1],octant_2d[5][i-1],octant_2d[6][i-1],octant_2d[7][i-1],rank_2d[i-1][0],rank_2d[i-1][1],rank_2d[i-1][2],rank_2d[i-1][3],rank_2d[i-1][4],rank_2d[i-1][5],rank_2d[i-1][6],rank_2d[i-1][7],rank_1[i],octant_name_id_mapping[str(rank_1[i])],"",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","",str((i-1)*mod)+"-"+str(np.minimum((i)*mod-1,n-2)),octant_2d[0][i-1],octant_2d[1][i-1],octant_2d[2][i-1],octant_2d[3][i-1],octant_2d[4][i-1],octant_2d[5][i-1],octant_2d[6][i-1],octant_2d[7][i-1],rank_2d[i-1][0],rank_2d[i-1][1],rank_2d[i-1][2],rank_2d[i-1][3],rank_2d[i-1][4],rank_2d[i-1][5],rank_2d[i-1][6],rank_2d[i-1][7],rank_1[i],octant_name_id_mapping[str(rank_1[i])],"",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"",octants1[i],max_count[i],counts[i],"",l1[i],l2[i],l3[i]])
 			elif i==3+(n-2)//mod:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","Octant ID","Octant Name","Count of Rank 1 Mod Values","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","Octant ID","Octant Name","Count of Rank 1 Mod Values","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"",octants1[i],max_count[i],counts[i],"",l1[i],l2[i],l3[i]])
 			elif i>=4+(n-2)//mod and i<=11+(n-2)//mod:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","",list_[i-(4+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(4+(n-2)//mod)])],count_[i-(4+(n-2)//mod)],"","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","",list_[i-(4+(n-2)//mod)],octant_name_id_mapping[str(list_[i-(4+(n-2)//mod)])],count_[i-(4+(n-2)//mod)],"","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"",octants1[i],max_count[i],counts[i],"",l1[i],l2[i],l3[i]])
 			else:
-				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","","","","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"","","","","",l1[i],l2[i],l3[i]])
+				rows.append([time[i+1],u[i+1],v[i+1],w[i+1],"","","",u_[i],v_[i],w_[i],octant[i],"","","","","","","","","","","","","","","","","","","","","","",line1[i],line2[i+3],linenext[0][i+2],linenext[1][i+2],linenext[2][i+2],linenext[3][i+2],linenext[4][i+2],linenext[5][i+2],linenext[6][i+2],linenext[7][i+2],"",octants1[i],max_count[i],counts[i],"",l1[i],l2[i],l3[i]])
 		for row in rows:
 			sheet.append(row)
 		book.save(list)
 		os.chdir(curr)
-		break
 
 
 mod=5000
