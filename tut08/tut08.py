@@ -4,55 +4,55 @@ import numpy as np
 import os
 os.system("cls")
 def scorecard():
-	name_of_player = [[],[]]
+	name_of_player = [[],[]]#list of name of players
 	fileObject = open("teams.txt","r")
 	data = fileObject.readlines()
 	for i in range(len(data)-1):
 		a=0
 		for j in range(len(data[i])):
 			if data[i][j] == " " and a==0:
-				name_of_player[i//2].append(data[i][0:j])
+				name_of_player[i//2].append(data[i][0:j])#append name of player
 				a=1
 			if data[i][j] == ":":
 				a = j+2
 			if data[i][j] ==",":
 				name_of_player[i//2].append(data[i][a:j])
 				a = j+2
-		name_of_player[i//2].append(data[i][a:len(data[i])-1])
+		name_of_player[i//2].append(data[i][a:len(data[i])-1])#appending last player name
 		i+=1
 
 	file1 = open("Scorecard.txt","w")
 	for k in range(2):
 		if k==0:
-			p = "Pakistan Innings"
+			p = "Pakistan Innings"#for current playing team name
 			filename = "pak_inns1.txt"
 		else:
 			p = "India Innings"
 			filename = "india_inns2.txt"
-		total =0
+		total =0#for counting total run
 		out=''
-		wiket=0
-		ball =0
+		wiket=0#for counting total wickit 
+		ball =0#for counting total balls/overs
 		extra = ['b',0,'lb',0,'w',0,'nb',0,'p',0]
 		fileObject = open(filename, "r")
 		data = fileObject.readlines()
-		list_sc = [["Batter"],[""],["R"],["B"],["4s"],["6s"],["SR"]]
-		list_bo = [["Bowler"],["O"],["M"],["R"],["W"],["NB"],["WD"],["ECO"]]
+		list_sc = [["Batter"],[""],["R"],["B"],["4s"],["6s"],["SR"]]#2d list for score board from batting side
+		list_bo = [["Bowler"],["O"],["M"],["R"],["W"],["NB"],["WD"],["ECO"]]#2d list for score board from bowling side
 		for i in range(len(data)):
 			y=0
 			a=0
 			x=0
-			if data[i][0:3]=='6.1':
+			if data[i][0:3]=='6.1':#for pawerplay data
 				powerplay = total
 			for j in range(len(data[i])):
 				if data[i][j] ==" " and a==0:
-					a = j+1
+					a = j+1#first index of bowler
 				if data[i][j:j+2] == 'to' and x==0:
-					x = j+3
+					x = j+3#first index of batter
 				if data[i][j] == ',':
-					y = j
-					name = data[i][x:y]
-					name1 = data[i][a:x-4]
+					y = j#first index of what happen in that ball
+					name = data[i][x:y]#batter name
+					name1 = data[i][a:x-4]#bowler name
 					if name1 not in list_bo[0]:
 						list_bo[0].append(name1)
 						for ankur in range(1,8):
@@ -63,14 +63,14 @@ def scorecard():
 						for ankur in range(2,6):
 							list_sc[ankur].append(0)
 					run = data[i][y+2:]
-					b = list_sc[0].index(name)
-					c = list_bo[0].index(name1)
-					if run[0:4] == 'wide':
+					b = list_sc[0].index(name)#index of batter in list for updating its data
+					c = list_bo[0].index(name1)#index of bowler in list for for updating its data
+					if run[0:4] == 'wide':#updating wide ball data
 						list_bo[3][c]+=1
 						list_bo[6][c]+=1
 						total+=1
 						extra[5]+=1
-					if 'wides' in run:
+					if 'wides' in run:#for wides there are two case
 						if run[2:6] == 'runs':
 							list_bo[3][c]+=int(run[0])
 							list_bo[6][c]+=int(run[0])
@@ -149,17 +149,17 @@ def scorecard():
 						out = out + str(total)+'-'+str(wiket)+'('+list_sc[0][b]+','+str(ball//6)+'.'+str(ball%6)+'), '
 					break
 			i+=1
-		for i in range(1,len(list_sc[1])):
+		for i in range(1,len(list_sc[1])):#updating sc of batter
 			list_sc[6].append(np.round_((list_sc[2][i]/list_sc[3][i])*100,2))
 
-		for i in range(len(list_sc[0])):
+		for i in range(len(list_sc[0])):#updating currect name of player from teams folder
 			for j in range(len(name_of_player[k])):
 				if list_sc[0][i] in name_of_player[k][j]:
 					list_sc[0][i] = name_of_player[k][j]
 				if list_bo[0][i%len(list_bo[0])] in name_of_player[1-k][j]:
 					list_bo[0][i%len(list_bo[0])] in name_of_player[1-k][j]
 
-		did_not_play = []
+		did_not_play = []#list of those player who did not play
 		for i in range(1,len(name_of_player[k])-1):
 			for j in range(len(list_sc[0])):
 				if list_sc[0][j] in name_of_player[k][i]:
@@ -167,6 +167,7 @@ def scorecard():
 				if j==len(list_sc[0])-1:
 					did_not_play.append(name_of_player[k][i])
 
+        #from here we append data in score file according to scoreboard
 		file1 = open("Scorecard.txt","a")
 		file1.write(f"{p : <90}{str(total)+'-'+str(wiket)+'('+str(ball//6)+'.'+str(ball%6)+' Ov)' : <50}"'\n')
 		for i in range(0,len(list_sc[0])):
