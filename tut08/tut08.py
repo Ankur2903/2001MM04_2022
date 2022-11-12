@@ -160,7 +160,12 @@ def scorecard():
 					list_bo[0][i%len(list_bo[0])] in name_of_player[1-k][j]
 
 		did_not_play = []
-		
+		for i in range(1,len(name_of_player[k])-1):
+			for j in range(len(list_sc[0])):
+				if list_sc[0][j] in name_of_player[k][i]:
+					break
+				if j==len(list_sc[0])-1:
+					did_not_play.append(name_of_player[k][i])
 
 		file1 = open("Scorecard.txt","a")
 		file1.write(f"{p : <90}{str(total)+'-'+str(wiket)+'('+str(ball//6)+'.'+str(ball%6)+' Ov)' : <50}"'\n')
