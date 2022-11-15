@@ -7,7 +7,7 @@ import calendar
 import datetime
 
 #from datetime import datetime
-#start_time = datetime.now()
+start_time = datetime.datetime.now()
 
 def attendance_report():
     rollNo = []
@@ -61,7 +61,7 @@ def attendance_report():
             a = list_date.index(timestamp[i][0:10])
             b = rollNo.index(attendance[i][0:8])
             total_att[b-1][a]+=1
-            if timestamp[i][11:13]=='14' or timestamp[i][11:] =='15:00:00':
+            if timestamp[i][11:13]=='14' or timestamp[i][11:] =='15:00':
                 real_att[b-1][a]=1
                 dupl_att[b-1][a]+=1
     
@@ -107,5 +107,5 @@ def attendance_report():
 
 attendance_report()
 print("*****************************************************     run successfully     ******************************************************")
-#end_time = datetime.now()
-#print('Duration of Program Execution: {}'.format(end_time - start_time))
+end_time = datetime.datetime.now()
+print('Duration of Program Execution: {}'.format(end_time - start_time))
