@@ -5,6 +5,11 @@ os.system("cls")
 import numpy as np
 import calendar
 import datetime
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 #from datetime import datetime
 start_time = datetime.datetime.now()
@@ -102,7 +107,67 @@ def attendance_report():
     for row in rows1:
         sheet.append(row)
     book.save('attendance_report_consolidated.xlsx')
+
+    send_mail()
             
+def send_mail():
+    fromaddr = input("Enter Mail Id: ")
+    toaddr = "cs3842022@gmail.com.com"
+    Password_ = input("Enter Password: ")
+
+    # instance of MIMEMultipart
+    msg = MIMEMultipart()
+
+    # storing the senders email address
+    msg['From'] = fromaddr
+
+    # storing the receivers email address
+    msg['To'] = toaddr
+
+    # storing the subject
+    msg['Subject'] = "Attendance Report Consolidated"
+
+    # string to store the body of the mail
+    body = "Dear Sir,\n\nPlease find below attached file.\n\nWarm Regards\nAnkur Saini\n2001MM04"
+
+    # attach the body with the msg instance
+    msg.attach(MIMEText(body, 'plain'))
+
+    # open the file to be sent
+    filename = 'attendance_report_consolidated.xlsx'
+    attachment = open("attendance_report_consolidated.xlsx", "rb")
+
+    # instance of MIMEBase and named as p
+    p = MIMEBase('application', 'octet-stream')
+
+    # To change the payload into encoded form
+    p.set_payload((attachment).read())
+
+    # encode into base64
+    encoders.encode_base64(p)
+
+    p.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+
+    # attach the instance 'p' to instance 'msg'
+    msg.attach(p)
+
+    # creates SMTP session
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+
+    # start TLS for security
+    s.starttls()
+
+    # Authentication
+    s.login(fromaddr, Password_)
+
+    # Converts the Multipart msg into a string
+    text = msg.as_string()
+
+    # sending the mail
+    s.sendmail(fromaddr, toaddr, text)
+
+    # terminating the session
+    s.quit()
 
 
 attendance_report()
